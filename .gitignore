@@ -1,0 +1,3 @@
+secrets.yml
+.gitsecret/keys/random_seed
+!*.secret
