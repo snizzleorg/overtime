@@ -1,5 +1,3 @@
-from cmd import PROMPT
-from pprint import pprint
 import requests
 import json
 import pandas as pd
