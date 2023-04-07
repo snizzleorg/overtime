@@ -9,23 +9,22 @@ from workalendar.europe import Berlin
 import yaml
 import click
 
+# load yml file to dictionary
+# secrets = yaml.load(open("./secrets.yml"), Loader=Any)
+with open("./secrets.yml", "r") as file:
+    secrets = yaml.safe_load(file)
+
 
 @click.command()
 @click.argument("name", required=False)
 @click.option(
     "--name",
     "-n",
-    type=click.Choice(
-        ["Steffen", "Volker", "Anton", "Olaf", "Samaneh", "Denis"], case_sensitive=False
-    ),
+    type=click.Choice(list(secrets["creators"].keys()), case_sensitive=False),
     multiple=False,
     prompt="Name",
 )
 def overtime(name):
-    # load yml file to dictionary
-    # secrets = yaml.load(open("./secrets.yml"), Loader=Any)
-    with open("./secrets.yml", "r") as file:
-        secrets = yaml.safe_load(file)
 
     # access values from dictionary
     API_KEY = secrets["timeular"]["API_KEY"]
@@ -87,8 +86,10 @@ def overtime(name):
     df.columns = df.columns.values
 
     df = df.T
+    
     df.columns = ["hours"]
-
+    df['%'] = df['hours']/df.sum()[0]*100
+    
     click.echo(df.round(1))
 
     worked_hours = df.sum()[0]
@@ -107,4 +108,5 @@ def overtime(name):
 
 
 if __name__ == "__main__":
+
     overtime()
